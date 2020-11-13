@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '.\designDialogObject.ui'
+# Form implementation generated from reading ui file '.\dialogObject\designDialogObject.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.0
 #
@@ -64,6 +64,9 @@ class Ui_Dialog(object):
         self.verticalLayout.addLayout(self.horizontalLayout_5)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
+        self.btnGrab = QtWidgets.QPushButton(Dialog)
+        self.btnGrab.setObjectName("btnGrab")
+        self.horizontalLayout.addWidget(self.btnGrab)
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem)
         self.btnOk = QtWidgets.QPushButton(Dialog)
@@ -91,5 +94,6 @@ class Ui_Dialog(object):
         self.btnArea1.setText(_translate("Dialog", "..."))
         self.label_4.setText(_translate("Dialog", "Area №2:"))
         self.btnArea2.setText(_translate("Dialog", "..."))
+        self.btnGrab.setText(_translate("Dialog", "Grab (Area 1)"))
         self.btnOk.setText(_translate("Dialog", "Ok"))
         self.btnCancel.setText(_translate("Dialog", "Cancel"))

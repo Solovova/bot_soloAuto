@@ -3,6 +3,9 @@ from dialogObject.designDialogObject import Ui_Dialog # pylint: disable=no-name-
 import os
 from funCV.cvGetArea import GetArea # pylint: disable=no-name-in-module, import-error
 from funArea import areaStrToList # pylint: disable=no-name-in-module, import-error
+import pyscreenshot as ImageGrab 
+import cv2
+import numpy as np
 
 class DialogObject(QtWidgets.QDialog, Ui_Dialog):
     isOk = False
@@ -15,7 +18,7 @@ class DialogObject(QtWidgets.QDialog, Ui_Dialog):
         self.btnCancel.clicked.connect(self.clc_btnCancel)
         self.btnArea1.clicked.connect(self.clc_btnArea1)
         self.btnArea2.clicked.connect(self.clc_btnArea2)
-
+        self.btnGrab.clicked.connect(self.clc_btnGrabArea1)
 
     def setData(self,el):
         index = self.cbType.findText(el.type1)
@@ -38,3 +41,12 @@ class DialogObject(QtWidgets.QDialog, Ui_Dialog):
 
     def clc_btnArea2(self):
         self.txtArea2.setText(str(GetArea().getArea(areaStrToList(self.txtArea2.text()))))
+    
+    def clc_btnGrabArea1(self):
+        lst = areaStrToList(self.txtArea1.text())
+        img_grab = ImageGrab.grab(bbox=(lst[0], lst[1], lst[2], lst[3]))
+        img_save = np.array(img_grab)
+        name = "img\\"+self.txtName.text()+".jpg"
+        print(name)
+        cv2.imwrite(name, img_save) # pylint: disable=no-member
+        print("grab")
