@@ -7,6 +7,7 @@ def main():
     window = GuiApp() 
     window.show()  
     app.exec_()  
+    window.saveList()
 
 if __name__ == '__main__':  
     main()  

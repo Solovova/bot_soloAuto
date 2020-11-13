@@ -12,15 +12,18 @@ class DialogObject(QtWidgets.QDialog, Ui_Dialog):
         self.btnOk.clicked.connect(self.clc_btnOk)
         self.btnCancel.clicked.connect(self.clc_btnCancel)
 
-    def setData(self, f1, f2):
-        self.lineEdit.setText(f1)
-        self.lineEdit_2.setText(f2)
+    def setData(self,el):
+        index = self.cbType.findText(el.type1)
+        if index != -1:
+            self.cbType.setCurrentIndex(index)
+
+        self.txtName.setText(el.name)
+        self.txtArea1.setText(el.area1)
+        self.txtArea2.setText(el.area2)
 
     def clc_btnOk(self):
         self.isOk = True
-        print("ok")
         self.close()
 
     def clc_btnCancel(self):
-        print("cancel")
         self.close()
