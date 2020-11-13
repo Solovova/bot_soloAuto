@@ -96,7 +96,13 @@ class GuiApp(QtWidgets.QMainWindow, designMain.Ui_MainWindow):
         print("edit:" + str(self.tableWidget.currentRow()))
 
     def clc_btnObjectsDelete(self):
-        if (self.tableWidget.currentRow() != -1):
+        curRow = self.tableWidget.currentRow()
+        if (curRow != -1):
             self.listAutoObject.remove(
                 self.listAutoObject[self.tableWidget.currentRow()])
             self.fillTable()
+            if (curRow >= self.tableWidget.rowCount()):
+                if (self.tableWidget.rowCount() != 0):
+                    self.tableWidget.selectRow(self.tableWidget.rowCount()-1)
+            else:
+                self.tableWidget.selectRow(curRow)
