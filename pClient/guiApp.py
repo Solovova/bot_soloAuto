@@ -5,7 +5,9 @@ import designMain
 import os
 from autoObject.autoObject import AutoObject
 import configparser
-
+from engine import Engine
+import time
+from TreadWorker import TreadWorker
 
 class GuiApp(QtWidgets.QMainWindow, designMain.Ui_MainWindow):
     listAutoObject = []
@@ -22,7 +24,10 @@ class GuiApp(QtWidgets.QMainWindow, designMain.Ui_MainWindow):
         self.btnObjectsAdd.clicked.connect(self.clc_btnObjectsAdd)
         self.btnObjectsEdit.clicked.connect(self.clc_btnObjectsEdit)
         self.btnObjectsDelete.clicked.connect(self.clc_btnObjectsDelete)
+        self.btnObjectsTest.clicked.connect(self.clc_btnObjectsTest)
         self.tableWidget.doubleClicked.connect(self.clc_btnObjectsEdit)
+        self.initThread()
+
 
     def loadList(self):
         if not os.path.exists("settings.ini"):
@@ -106,3 +111,27 @@ class GuiApp(QtWidgets.QMainWindow, designMain.Ui_MainWindow):
                     self.tableWidget.selectRow(self.tableWidget.rowCount()-1)
             else:
                 self.tableWidget.selectRow(curRow)
+    
+    def clc_btnObjectsTest(self):
+        testResult = Engine(self.listAutoObject).getAreaCoordByName("btnHarverWoodSlider")
+        print(testResult)
+
+
+        if (self.tableWidget.currentRow() != -1):
+            testResult = Engine(self.listAutoObject).getAreaCoord(self.listAutoObject[self.tableWidget.currentRow()])
+            print(testResult)
+            # testResult = Engine(self.listAutoObject).isArea(self.listAutoObject[self.tableWidget.currentRow()])
+            # # testResult = str(int(Engine(self.listAutoObject).getText(self.listAutoObject[self.tableWidget.currentRow()])))
+            
+            # self.tableWidget.setItem(self.tableWidget.currentRow(), 4, QtWidgets.QTableWidgetItem(testResult))
+            # self.tableWidget.resizeColumnsToContents()
+
+
+
+    def initThread(self):
+        self.treadWorker = TreadWorker(self)
+        self.treadWorker.signal.connect(self.SignalTreadWorker)
+        self.treadWorker.start()
+
+    def SignalTreadWorker(self,data):
+        print("Signal")

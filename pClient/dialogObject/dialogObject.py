@@ -45,7 +45,7 @@ class DialogObject(QtWidgets.QDialog, Ui_Dialog):
     def clc_btnGrabArea1(self):
         lst = areaStrToList(self.txtArea1.text())
         img_grab = ImageGrab.grab(bbox=(lst[0], lst[1], lst[2], lst[3]))
-        img_save = np.array(img_grab)
+        img_save = cv2.cvtColor(np.array(img_grab), cv2.COLOR_RGB2BGR) # pylint: disable=no-member
         name = "img\\"+self.txtName.text()+".jpg"
         print(name)
         cv2.imwrite(name, img_save) # pylint: disable=no-member

@@ -22,6 +22,7 @@ def draw_rect(event,x,y,flags,param):
 
 class GetArea(object):
     rect = [0 ,0 ,100 ,100]
+    draw = False
 
     def drawRectangle(self):
         self.img_out = self.img_orig.copy()
@@ -30,7 +31,7 @@ class GetArea(object):
     def getArea(self,inRect):
         self.rect = inRect
         img_grab = ImageGrab.grab(bbox=(0, 0, 1919, 1079)) #x, y, w, h
-        self.img_orig = np.array(img_grab)
+        self.img_orig = cv2.cvtColor(np.array(img_grab), cv2.COLOR_RGB2BGR)
         self.drawRectangle()
 
         cv2.namedWindow("image", cv2.WND_PROP_FULLSCREEN)
