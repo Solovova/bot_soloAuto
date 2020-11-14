@@ -36,9 +36,13 @@ class TreadWorker(QThread):
             self.engine.clickToAreaByName("btnFind")
 
     def _commandFES(self):
-        food = int(self.engine.getTextByName("txtFood"))
-        water = int(self.engine.getTextByName("txtWater"))
-        energy = int(self.engine.getTextByName("txtEnergy"))
+        food = self.engine.strToInt(self.engine.getTextByName("txtFood"))
+        water = self.engine.strToInt(self.engine.getTextByName("txtWater"))
+        energy = self.engine.strToInt(self.engine.getTextByName("txtEnergy"))
+
+        print(str(food))
+        print(str(water))
+        print(str(energy))
 
         maxFood = 100
         maxWater = 100
@@ -49,7 +53,7 @@ class TreadWorker(QThread):
             while True:
                 self._commandGoToScreenMain()
                 self.engine.clickToAreaByName("btnFood")
-                food = int(self.engine.getTextByName("txtFood"))
+                food = self.engine.strToInt(self.engine.getTextByName("txtFood"))
                 if (food > (maxFood - oneFood)):
                     break
 
@@ -57,7 +61,7 @@ class TreadWorker(QThread):
             while True:
                 self._commandGoToScreenMain()
                 self.engine.clickToAreaByName("btnWater")
-                water = int(self.engine.getTextByName("txtWater"))
+                water = self.engine.strToInt(self.engine.getTextByName("txtWater"))
                 if (water > (maxWater - oneWater)):
                     break
 
@@ -82,11 +86,20 @@ class TreadWorker(QThread):
     def _commandHarvest(self):
         self._commandGoToScreenSearch()
         self.engine.clickToAreaByName("btnWoodHarvest")
+        if self.engine.isAreaByName("btnHands"):
+            self._isActive = False
+            return
         self._commandHarvestMoveSlider()
         self.engine.clickToAreaByName("btnWoodHarvestDoIt")
         time.sleep(1)
         while self.engine.isAreaByName("pbHarvestWood"):
             time.sleep(0.5)
+    
+    def _commandOven(self):
+        self._commandGoToScreenSearch()
+        self.engine.clickToAreaByName("btnOven")
+        for i in range(10):
+            self.engine.clickToAreaByName("btnOvenDoIt")
         
     def mainLoop(self):
         print(self.loop)
@@ -95,3 +108,5 @@ class TreadWorker(QThread):
         self._commandFES()
         self._commandFES()
         self._commandHarvest()
+        if self.loop % 10 == 0:
+            self._commandOven()

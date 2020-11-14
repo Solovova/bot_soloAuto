@@ -100,6 +100,17 @@ class Engine():
         # return False
         return pytesseract.image_to_string(screenshot, config='--psm 6 -c tessedit_char_whitelist=0123456789')
 
+    def strToInt(self, str):
+        print("<--"+str)
+        result = ""
+        for s in str:
+            if s in ('0','1','2','3','4','5','6','7','8','9'):
+                result = result + s
+        print("-->"+result)
+        if len(result) == 0:
+            return 0
+        return int(result)
+
     def getTextByName(self, name):
         isObj, autoObject  = self.getAutoObjectByName(name)
         if isObj:
