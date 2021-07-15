@@ -15,10 +15,29 @@ class TreadWorker(QThread):
         self.engine = Engine(window.listAutoObject)
         
     def run(self):
+        
+        # Sleep days 
+        self.countSleepDays = 22
+        self.countSleepDaysUseFood = False
+
         while self._isRunning:
             time.sleep(0.1)
             if self._isActive:
-                self.mainLoop()
+                self.workLoop_Fishing()
+        
+
+        # while self._isRunning:
+        #     time.sleep(0.1)
+        #     if self._isActive:
+        #         self.sleepDays()
+        
+            
+        # Work
+        # while self._isRunning:
+            # time.sleep(0.1)
+            # if self._isActive:
+            #     self.mainLoop()
+                
 
     def stop(self):
         self._isRunning = False
@@ -44,9 +63,9 @@ class TreadWorker(QThread):
         print(str(water))
         print(str(energy))
 
-        maxFood = 100
-        maxWater = 100
-        oneFood = 20
+        maxFood = 150
+        maxWater = 125
+        oneFood = 100
         oneWater = 35
 
         if (food<20):
@@ -57,7 +76,7 @@ class TreadWorker(QThread):
                 if (food > (maxFood - oneFood)):
                     break
 
-        if (water<20):
+        if (water<10):
             while True:
                 self._commandGoToScreenMain()
                 self.engine.clickToAreaByName("btnWater")
@@ -100,7 +119,56 @@ class TreadWorker(QThread):
         self.engine.clickToAreaByName("btnOven")
         for i in range(10):
             self.engine.clickToAreaByName("btnOvenDoIt")
+
+
+    def _commandSleepMoveSlider(self):
+        find, point = self.engine.getAreaCoordByName("btnSleepSlider")
         
+        if find:
+            print("Sleep find: " + str(self.countSleepDays) + " Point0:" + str(point[0]) +  " Point1:" + str(point[1]) )
+            isObj, autoObject  = self.engine.getAutoObjectByName("btnSleepSlider")
+            if isObj:
+                area2 = areaStrToList(autoObject.area2)
+                moveFX = point[0] + area2[0]
+                moveFY = point[1] + area2[1]
+                pyautogui.moveTo(moveFX, moveFY)
+                pyautogui.drag(area2[2] - moveFX, 0, 1, button='left')
+                time.sleep(0.2)
+        else:
+            print("Sleep no find: " + str(self.countSleepDays))
+
+    def sleepDays(self):
+        self.countSleepDays =  self.countSleepDays - 1
+        if (self.countSleepDays<0):
+            self._isActive = False
+            return
+
+        self._commandGoToScreenMain()
+
+        if (self.countSleepDaysUseFood):
+            self.engine.clickToAreaByName("btnWater")
+            self.countSleepDaysUseFood = False
+        else:
+            self.engine.clickToAreaByName("btnFood")
+            self.countSleepDaysUseFood = True
+        
+        self.engine.clickToAreaByName("btnSleep")
+        self._commandSleepMoveSlider()
+        self.engine.clickToAreaByName("bntSleepDoIt")
+        time.sleep(8)
+
+    def _gotoFishScreen(self):
+        print("goto Fish screen")
+        if not self.engine.isAreaByName("fishBtnStart"):
+            self.engine.clickToAreaByName("btnFind")
+            self.engine.clickToAreaByName("fishBtnGoToFish")
+        
+
+    def _commandFishing(self):
+        print("fishing")
+        self.engine.clickToAreaByName("fishBtnStart")
+        time.sleep(1)
+
     def mainLoop(self):
         print(self.loop)
         self.loop = self.loop + 1
@@ -108,5 +176,15 @@ class TreadWorker(QThread):
         self._commandFES()
         self._commandFES()
         self._commandHarvest()
-        if self.loop % 10 == 0:
-            self._commandOven()
+        # if self.loop % 10 == 0:
+        #     self._commandOven()
+
+    def workLoop_Fishing(self):
+        print("Fish loop:" + str(self.loop))
+        self.loop = self.loop + 1
+        time.sleep(0.1)
+        self._commandFES()
+        self._commandFES()
+        self._gotoFishScreen()
+        self._commandFishing()
+
